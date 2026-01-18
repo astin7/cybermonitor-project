@@ -10,7 +10,6 @@ import hashlib
 import pythoncom 
 
 # --- CONFIGURATION ---
-
 # Anyone can use this key for 20 minutes (1200 seconds)
 UNIVERSAL_TRIAL_KEY = "CYBER-DEMO-20" 
 
