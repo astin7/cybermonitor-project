@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURITY GATEWAY</title>
+    <script type="text/javascript" src="/eel.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #050a10; color: #00f3ff; font-family: 'Orbitron', sans-serif;
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            margin: 0; overflow: hidden;
+            background-image: linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .login-box {
+            border: 2px solid #00f3ff; padding: 40px; text-align: center;
+            background: rgba(0, 243, 255, 0.05); box-shadow: 0 0 20px rgba(0, 243, 255, 0.1); width: 350px;
+        }
+        h2 { margin-top: 0; letter-spacing: 2px; text-shadow: 0 0 10px #00f3ff; }
+        input {
+            background: transparent; border: 1px solid #00f3ff; color: white; padding: 10px; width: 80%;
+            font-family: 'Orbitron', sans-serif; text-align: center; font-size: 1.2rem; margin-bottom: 20px; outline: none;
+        }
+        button {
+            background: #00f3ff; color: black; border: none; padding: 10px 30px;
+            font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        button:hover { background: white; box-shadow: 0 0 15px white; }
+        #error-msg { color: #ff2a6d; height: 20px; margin-top: 10px; font-size: 0.9rem; font-weight: bold; letter-spacing: 1px; }
+        .hwid-display { font-size: 0.7rem; color: #555; margin-bottom: 20px; cursor: pointer; }
+        .hwid-display:hover { color: #00f3ff; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>AUTHENTICATION</h2>
+        <div class="hwid-display" id="hwid-box" onclick="copyHWID()" title="Click to Copy">
+            FETCHING SYSTEM ID...
+        </div>
+        <input type="text" id="codebox" placeholder="XXXX-XXXX" maxlength="20">
+        <br>
+        <button onclick="checkCode()">ACCESS</button>
+        <div id="error-msg"></div>
+    </div>
+    <script>
+        async function loadID() {
+            let id = await eel.get_hwid_frontend()();
+            document.getElementById('hwid-box').innerText = "SYSTEM ID: " + id;
+        }
+        loadID();
+        function copyHWID() {
+            let text = document.getElementById('hwid-box').innerText.replace("SYSTEM ID: ", "");
+            navigator.clipboard.writeText(text);
+            document.getElementById('error-msg').innerText = "ID COPIED";
+            document.getElementById('error-msg').style.color = "#00f3ff";
+        }
+        async function checkCode() {
+            let code = document.getElementById('codebox').value;
+            let status = await eel.validate_key(code)();
+            if (status === "success") window.location.href = "index.html";
+            else {
+                document.getElementById('error-msg').innerText = status === "expired" ? "KEY EXPIRED" : "ACCESS DENIED";
+                document.getElementById('error-msg').style.color = "#ff2a6d";
+            }
+        }
+    </script>
+</body>
+</html>

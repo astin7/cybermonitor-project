@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberMonitor by astin7</title>
+    <script type="text/javascript" src="/eel.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --main-color: #00f3ff;
+            --alert-color: #ff2a6d;
+            --bg-color: #050a10;
+            --glass-bg: rgba(0, 243, 255, 0.05);
+        }
+        
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        ::-webkit-scrollbar-thumb { background: var(--main-color); border-radius: 4px; box-shadow: 0 0 10px var(--main-color); }
+
+        body {
+            background-color: var(--bg-color); color: var(--main-color);
+            font-family: 'Orbitron', sans-serif; margin: 0;
+            height: 100vh; display: flex; flex-direction: column;
+            overflow-x: hidden; min-height: 500px; overflow-y: auto;
+            background-image: linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* HEADER */
+        .top-bar {
+            flex: 0 0 auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0.5rem 2rem; 
+            background: rgba(0,0,0,0.6);
+            border-bottom: 1px solid var(--main-color); 
+            z-index: 20;
+            position: relative; 
+            -webkit-app-region: drag; 
+            user-select: none; 
+        }
+
+        /* TITLE */
+        .app-title {
+            font-weight: 900; 
+            letter-spacing: 3px; 
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            color: var(--main-color); 
+            text-shadow: 0 0 10px var(--main-color);
+        }
+
+        /* CENTER STATUS */
+        .center-status {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Share Tech Mono', monospace;
+            color: #ffffff;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            font-weight: bold;
+            pointer-events: none; 
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        input, button, .no-drag {
+            -webkit-app-region: no-drag;
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none; border: none; width: 30px; height: 30px; cursor: pointer; background: none;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch {
+            border: 2px solid var(--main-color); border-radius: 50%;
+            box-shadow: 0 0 15px var(--main-color), inset 0 0 10px var(--main-color);
+        }
+
+        /* DASHBOARD */
+        .dashboard {
+            flex: 1; display: flex; justify-content: center; align-items: center;
+            gap: 20px; padding: 10px 20px; width: 100%; box-sizing: border-box; min-height: 250px; 
+        }
+
+        .card {
+            background: var(--glass-bg); width: 30%; min-width: 200px; max-width: 450px;
+            height: 90%; max-height: 400px; padding: 15px; position: relative;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        }
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--main-color); z-index: -1;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        }
+        .card::after {
+            content: ''; position: absolute; top: 1px; left: 1px; right: 1px; bottom: 1px; background: #080808; z-index: -1;
+            clip-path: polygon(19px 0, 100% 0, 100% calc(100% - 19px), calc(100% - 19px) 100%, 0 100%, 0 19px);
+        }
+
+        .card-header {
+            color: var(--main-color); font-size: clamp(0.8rem, 1.5vw, 1.2rem); letter-spacing: 2px;
+            margin-bottom: 5px; border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+            padding-bottom: 5px; width: 100%; text-align: center; text-transform: uppercase;
+        }
+
+        .gauge-wrapper {
+            width: 100%; height: auto; aspect-ratio: 1 / 1; max-height: 70%; 
+            position: relative; display: flex; justify-content: center; align-items: center;
+        }
+        svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        circle { fill: none; stroke-width: 8; stroke-linecap: round; }
+        .bg-ring { stroke: #1a222c; }
+        .progress-ring {
+            stroke: var(--main-color); stroke-dasharray: 440; stroke-dashoffset: 440;
+            transition: stroke-dashoffset 0.6s ease; filter: drop-shadow(0 0 8px var(--main-color));
+        }
+        .gauge-data {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .big-text {
+            font-size: clamp(2rem, 5vw, 4rem); font-weight: 700; margin: 0; color: var(--main-color);
+            filter: brightness(1.5) drop-shadow(0 0 5px var(--main-color));
+        }
+        .temp-text { font-size: clamp(0.9rem, 1.5vw, 1.2rem); color: var(--alert-color); font-weight: bold; }
+
+        .stat-footer {
+            margin-top: auto; background: rgba(0, 243, 255, 0.1); border: 1px solid var(--main-color);
+            padding: 4px 10px; border-radius: 4px; font-family: 'Share Tech Mono', monospace;
+            font-size: clamp(0.8rem, 1.2vw, 1rem); min-width: 80px; text-align: center;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+        }
+
+        .terminal-container {
+            flex: 0 0 160px; width: 90%; margin: 0 auto 10px auto; 
+            background: rgba(0, 0, 0, 0.8); border: 1px solid #333; border-left: 4px solid var(--main-color);
+            padding: 0; font-family: 'Share Tech Mono', monospace; z-index: 15;
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+        }
+        .header-row { 
+            flex: 0 0 auto; color: var(--main-color); font-size: 0.8rem; padding: 6px 10px; 
+            border-bottom: 1px solid var(--main-color); opacity: 0.9; letter-spacing: 1px; background: #000;
+        }
+        .proc-list-scroll { flex: 1; overflow-y: auto; padding: 5px; }
+        .proc-row { 
+            display: flex; justify-content: space-between; padding: 3px 5px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; 
+            color: var(--main-color); filter: brightness(1.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="app-title">CyberMonitor</div>
+        
+        <div id="status-display" class="center-status">CHECKING LICENSE...</div>
+
+        <input type="color" id="colorPicker" value="#00f3ff">
+    </div>
+
+    <div class="dashboard">
+        <div class="card">
+            <div class="card-header" id="cpu-name">CPU</div>
+            <div class="gauge-wrapper">
+                <svg viewBox="0 0 170 170">
+                    <circle class="bg-ring" cx="85" cy="85" r="70"></circle>
+                    <circle class="progress-ring" id="cpu-ring" cx="85" cy="85" r="70"></circle>
+                </svg>
+                <div class="gauge-data">
+                    <span id="cpu-text" class="big-text">0%</span>
+                    <span id="cpu-temp" class="temp-text">0°C</span>
+                </div>
+            </div>
+            <div id="cpu-mhz" class="stat-footer">0 MHZ</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">MEMORY</div>
+            <div class="gauge-wrapper">
+                <svg viewBox="0 0 170 170">
+                    <circle class="bg-ring" cx="85" cy="85" r="70"></circle>
+                    <circle class="progress-ring" id="ram-ring" cx="85" cy="85" r="70"></circle>
+                </svg>
+                <div class="gauge-data">
+                    <span id="ram-text" class="big-text">0%</span>
+                </div>
+            </div>
+            <div id="ram-gb" class="stat-footer">0 GB</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="gpu-name">GPU</div>
+            <div class="gauge-wrapper">
+                <svg viewBox="0 0 170 170">
+                    <circle class="bg-ring" cx="85" cy="85" r="70"></circle>
+                    <circle class="progress-ring" id="gpu-ring" cx="85" cy="85" r="70"></circle>
+                </svg>
+                <div class="gauge-data">
+                    <span id="gpu-text" class="big-text">0%</span>
+                    <span id="gpu-temp" class="temp-text">0°C</span>
+                </div>
+            </div>
+            <div id="gpu-mhz" class="stat-footer">0 MHZ</div>
+        </div>
+    </div>
+
+    <div class="terminal-container">
+        <div class="header-row">ACTIVE THREADS</div>
+        <div id="proc-list" class="proc-list-scroll"></div>
+    </div>
+
+    <script>
+        function setProgress(percent, elementId) {
+            const circle = document.getElementById(elementId);
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
+
+        function formatTime(seconds) {
+            let sec = Math.floor(seconds);
+            let m = Math.floor(sec / 60);
+            let s = sec % 60;
+            return m + ":" + (s < 10 ? "0" : "") + s;
+        }
+
+        eel.expose(updateDashboard);
+        function updateDashboard(data) {
+            // CPU
+            document.getElementById('cpu-name').innerText = data.cpu_name;
+            document.getElementById('cpu-text').innerText = Math.round(data.cpu_usage) + "%";
+            document.getElementById('cpu-temp').innerText = data.cpu_temp + "°C";
+            setProgress(data.cpu_usage, 'cpu-ring');
+
+            // OFFLINE MODE
+            if (data.cpu_mhz > 0) {
+                let mhz = document.getElementById('cpu-mhz');
+                mhz.innerText = data.cpu_mhz + " MHZ";
+                mhz.style.color = ""; mhz.style.borderColor = "";
+            } else {
+                let mhz = document.getElementById('cpu-mhz');
+                mhz.innerText = "OFFLINE";
+                mhz.style.color = "var(--alert-color)"; mhz.style.borderColor = "var(--alert-color)";
+            }
+
+            // RAM
+            document.getElementById('ram-text').innerText = Math.round(data.ram_usage) + "%";
+            document.getElementById('ram-gb').innerText = data.ram_used_gb + " GB";
+            setProgress(data.ram_usage, 'ram-ring');
+
+            // GPU
+            document.getElementById('gpu-name').innerText = data.gpu_name;
+            document.getElementById('gpu-text').innerText = Math.round(data.gpu_load) + "%";
+            document.getElementById('gpu-temp').innerText = data.gpu_temp + "°C";
+            document.getElementById('gpu-mhz').innerText = data.gpu_mhz + " MHZ";
+            setProgress(data.gpu_load, 'gpu-ring');
+
+            // PROCS
+            let procList = document.getElementById('proc-list');
+            procList.innerHTML = "";
+            data.processes.forEach(proc => {
+                let row = document.createElement('div');
+                row.className = "proc-row";
+                row.innerHTML = `<span>${proc.name}</span> <span style="filter: brightness(1.5); font-weight:bold;">${proc.cpu_percent.toFixed(1)}%</span>`;
+                procList.appendChild(row);
+            });
+
+            // --- HEADER STATUS LOGIC ---
+            let statusBox = document.getElementById('status-display');
+            
+            if (data.time_left === -1) {
+                // PERMANENT USER
+                statusBox.innerText = "LIFE TIME VERSION";
+            } 
+            else if (data.time_left > 0) {
+                // TRIAL USER
+                statusBox.innerText = "TRIAL: " + formatTime(data.time_left);
+            } 
+            else {
+                // EXPIRED
+                window.location.href = "login.html";
+            }
+        }
+
+        async function runLoop() {
+            while (true) {
+                let data = await eel.get_stats()();
+                updateDashboard(data);
+                await new Promise(r => setTimeout(r, 1000));
+            }
+        }
+        runLoop();
+
+        document.getElementById('colorPicker').addEventListener('input', (e) => {
+            document.documentElement.style.setProperty('--main-color', e.target.value);
+            document.documentElement.style.setProperty('--glass-bg', e.target.value + "0D");
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+/* --- NEW TEXT STYLES --- */
+.tech-text {
+    font-family: 'Share Tech Mono', monospace; /* Digital Clock Font */
+    font-size: 1.2rem;
+    color: var(--main-color);
+    margin-top: 5px;
+    border: 1px solid var(--main-color);
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 243, 255, 0.1);
+}
+
+/* --- NEW PROCESS TERMINAL --- */
+.terminal-container {
+    width: 80%;
+    margin: 0 auto 20px auto; /* Center bottom */
+    border: 1px solid #333;
+    background: #0a0a0a;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.process-feed {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--main-color);
+    margin-top: 10px;
+    min-height: 100px;
+}
+
+.proc-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Make the first item (highest CPU) glow */
+.proc-row:first-child {
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--main-color);
+}
