@@ -88,7 +88,6 @@ except Exception: pass
 eel.init('web')
 
 # --- LICENSE LOGIC ---
-
 def load_license_data():
     if os.path.exists(LICENSE_FILE):
         try:
