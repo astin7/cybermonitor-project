@@ -1,2 +1,18 @@
 # Created by venv; see https://docs.python.org/3/library/venv.html
+node_modules/
+dist/
+dist-ssr/
+*.local
+.env
+.env.*
 venv/
+.venv/
+__pycache__/
+*.pyc
+build/
+license_tracker.json
+keygen.py
+*.spec
+.DS_Store
+.vscode/
+.idea/
