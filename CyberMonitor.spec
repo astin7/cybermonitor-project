@@ -4,8 +4,8 @@
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[],
-    datas=[('web', 'web'), ('LibreHardwareMonitorLib.dll', '.')],
+    binaries=[('LibreHardwareMonitorLib.dll', '.'), ('HidSharp.dll', '.')],
+    datas=[('web', 'web')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -35,4 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['web\\cybermonitor-logo.ico'],
 )

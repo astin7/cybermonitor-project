@@ -8,17 +8,17 @@ import json
 import time 
 import hashlib 
 import pythoncom 
+import winreg
 
 # --- CONFIGURATION ---
-
 # Anyone can use this key for 20 minutes (1200 seconds)
 UNIVERSAL_TRIAL_KEY = "CYBER-DEMO-20" 
 
 # Your Hardware Lock Secrets
 PERM_SALT = "CYBER-2077-TOP-SECRET" 
 TRIAL_SALT = "CYBER-TRIAL-LIMITED"    
-
 LICENSE_FILE = "license_tracker.json"
+REG_PATH = r"Software\CyberMonitor"
 
 # Global State
 CURRENT_USER_KEY = None
@@ -89,16 +89,36 @@ eel.init('web')
 
 # --- LICENSE LOGIC ---
 def load_license_data():
-    if os.path.exists(LICENSE_FILE):
-        try:
-            with open(LICENSE_FILE, 'r') as f: return json.load(f)
-        except: pass
-    return {}
+    """Reads license dictionary from the Windows Registry"""
+    try:
+        # Open the key for reading
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, REG_PATH, 0, winreg.KEY_READ)
+        
+        # Retrieve the data
+        value, _ = winreg.QueryValueEx(key, "LicenseInfo")
+        winreg.CloseKey(key)
+        return json.loads(value)
+    except (FileNotFoundError, OSError):
+        # If the key doesn't exist yet, return empty
+        return {}
+    except Exception as e:
+        print(f"Registry Load Error: {e}")
+        return {}
 
 def save_license_data(data):
+    """Saves license dictionary to the Windows Registry"""
     try:
-        with open(LICENSE_FILE, 'w') as f: json.dump(data, f)
-    except: pass
+        # Create or open the registry key
+        key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, REG_PATH)
+        
+        # Convert dictionary to JSON string for storage
+        json_str = json.dumps(data)
+        
+        # Store it as a string value named 'LicenseInfo'
+        winreg.SetValueEx(key, "LicenseInfo", 0, winreg.REG_SZ, json_str)
+        winreg.CloseKey(key) #
+    except Exception as e:
+        print(f"Registry Save Error: {e}")
 
 @eel.expose
 def get_hwid_frontend():
@@ -110,7 +130,7 @@ def validate_key(user_key):
     
     my_hwid = get_system_hwid()
 
-    # CHECK UNIVERSAL TRIAL (20 Mins for Everyone)
+    # CHECK UNIVERSAL TRIAL 
     if user_key == UNIVERSAL_TRIAL_KEY:
         data = load_license_data()
         
@@ -129,7 +149,7 @@ def validate_key(user_key):
         else:
             return "expired"
 
-    # CHECK PERMANENT FORMULA (Hardware Lock)
+    # CHECK PERMANENT FORMULA
     if verify_key_math(user_key, my_hwid, PERM_SALT):
         CURRENT_USER_KEY = "PERMANENT-OWNER"
         return "success"
@@ -138,7 +158,7 @@ def validate_key(user_key):
     if verify_key_math(user_key, my_hwid, TRIAL_SALT):
         data = load_license_data()
         if user_key not in data:
-            data[user_key] = 3600 # Give 1 Hour
+            data[user_key] = 3600
             save_license_data(data)
             CURRENT_USER_KEY = user_key
             return "success"
@@ -153,7 +173,7 @@ def validate_key(user_key):
     return "invalid"
 
 def decrement_time():
-    # Decrement for ANY key that is not permanent (Universal OR Generated)
+    """No changes needed here, it uses the new load/save functions automatically"""
     if CURRENT_USER_KEY and CURRENT_USER_KEY != "PERMANENT-OWNER":
         data = load_license_data()
         if CURRENT_USER_KEY in data:
