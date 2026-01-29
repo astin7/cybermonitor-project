@@ -14,7 +14,7 @@ import winreg
 # Anyone can use this key for 20 minutes (1200 seconds)
 UNIVERSAL_TRIAL_KEY = "CYBER-DEMO-20" 
 
-# Your Hardware Lock Secrets
+# Hardware Lock Secrets
 PERM_SALT = "CYBER-2077-TOP-SECRET" 
 TRIAL_SALT = "CYBER-TRIAL-LIMITED"    
 LICENSE_FILE = "license_tracker.json"
