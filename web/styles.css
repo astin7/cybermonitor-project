@@ -1,6 +1,5 @@
-/* --- NEW TEXT STYLES --- */
 .tech-text {
-    font-family: 'Share Tech Mono', monospace; /* Digital Clock Font */
+    font-family: 'Share Tech Mono', monospace;
     font-size: 1.2rem;
     color: var(--main-color);
     margin-top: 5px;
@@ -10,10 +9,9 @@
     background: rgba(0, 243, 255, 0.1);
 }
 
-/* --- NEW PROCESS TERMINAL --- */
 .terminal-container {
     width: 80%;
-    margin: 0 auto 20px auto; /* Center bottom */
+    margin: 0 auto 20px auto;
     border: 1px solid #333;
     background: #0a0a0a;
     padding: 15px;
@@ -36,7 +34,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Make the first item (highest CPU) glow */
+/* This makes the first item, which is the highest CPU, glow */
 .proc-row:first-child {
     font-weight: bold;
     text-shadow: 0 0 5px var(--main-color);
