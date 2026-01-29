@@ -15,7 +15,7 @@ A high-performance system telemetry and security utility built with **Python** a
 * **Interface**: Eel (Chromium-based UI), CSS Grid, SVG Rings 
 
 ## Security Implementation
-The application performs a **Mathematical Validation Check** on startup. Rather than checking a database, it verifies the license key against a **salted SHA-256 hash** of the user's Motherboard UUID [cite: 2026-01-23].
+The application performs a **Mathematical Validation Check** on startup. Rather than checking a database, it verifies the license key against a **salted SHA-256 hash** of the user's Motherboard UUID
 * **Permanent Keys**: Verified using a specific `PERM_SALT` 
 * **Trial Keys**: Decoupled using a `TRIAL_SALT` with an integrated countdown timer stored in an encrypted registry state
 
