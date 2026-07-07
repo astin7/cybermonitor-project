@@ -3,7 +3,7 @@ import os
 import ctypes
 import clr
 
-# --- AUTO-ADMIN CHECK ---
+# Auto admin check
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -18,7 +18,7 @@ if not is_admin():
         print(f"Failed to restart as admin: {e} ❌")
     sys.exit()
 
-# --- LOAD THE DRIVER ---
+# Load the driver
 from pythonnet import load
 try: load("netfx")
 except: pass
@@ -39,7 +39,7 @@ except Exception as e:
     input("Press Enter to exit...")
     sys.exit()
 
-# --- SCAN HARDWARE ---
+# Scan hardware
 print("SCANNING HARDWARE SENSORS...")
 print("=================================")
 
