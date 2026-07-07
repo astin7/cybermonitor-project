@@ -2,7 +2,13 @@
 
 A high-performance system telemetry and security utility built with **Python** and **Eel**. This tool provides real-time hardware diagnostics while maintaining enterprise-level software protection 
 
-Installation: https://astin7.github.io/cybermonitor/
+## Installation
+1. **Download the latest release: Download CyberMonitor**
+2. **Local Development Setup:**
+   **If you are cloning this repository to build from source, you must configure your local environments variables:
+   * Rename `secrets_config.example.py` to `secrets_config.py`
+   * Open `secrets_config.py` and replace the placeholder strings with your own custom crytopgraphic salts
+   * *Note: The application will not compile or run without a local `secrets_config.py` file.*
 
 ## Engineering Highlights
 * **Minimal Overhead Engine**: Leverages `psutil` and `LibreHardwareMonitorLib` to deliver granular hardware telemetry with **<1% CPU utilization** 
