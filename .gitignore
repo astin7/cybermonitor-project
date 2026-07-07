@@ -1,18 +1,28 @@
-# Created by venv; see https://docs.python.org/3/library/venv.html
+# Node.js & Vite Frontend
 node_modules/
-dist/
 dist-ssr/
-*.local
 .env
 .env.*
+*.local
+
+# Python & Environments
+__pycache__/
+*.py[cod]
+*$py.class
 venv/
 .venv/
-__pycache__/
-*.pyc
+
+# PyInstaller Build Artifacts
 build/
+dist/
+*.spec
+
+# CyberMonitor Security & Local Data
 license_tracker.json
 keygen.py
-*.spec
+secrets_config.py
+
+# OS & IDE Files
 .DS_Store
 .vscode/
 .idea/

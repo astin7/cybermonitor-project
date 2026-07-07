@@ -9,14 +9,15 @@ import time
 import hashlib 
 import pythoncom 
 import winreg
+import secrets_config
 
 # CONFIGURATION
 # Anyone can use this key for 20 minutes (1200 seconds)
 UNIVERSAL_TRIAL_KEY = "CYBER-TRIAL-LIMITED" 
 
 # Hardware Lock Secrets
-PERM_SALT = "CYBER-2077-TOP-SECRET" 
-TRIAL_SALT = "CYBER-MATH-SECRET-99"    
+PERM_SALT = secrets_config.PERM_SALT
+TRIAL_SALT = secrets_config.TRIAL_SALT
 LICENSE_FILE = "license_tracker.json"
 REG_PATH = r"Software\CyberMonitor"
 

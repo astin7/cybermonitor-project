@@ -1,8 +1,10 @@
+import os
 import hashlib
+import secrets_config
 
-# Configuration
-PERM_SALT = "CYBER-2077-TOP-SECRET"   # Generates Lifetime Keys
-TRIAL_SALT = "CYBER-MATH-SECRET-99"    # Generates 1-Hour Keys
+# If the .env file is missing, this will return None
+PERM_SALT = secrets_config.PERM_SALT
+TRIAL_SALT = secrets_config.TRIAL_SALT
 
 def generate_key(hardware_id, salt):
     """Generates a key based on ID + Specific Salt"""
