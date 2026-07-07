@@ -2,6 +2,8 @@
 
 A high-performance system telemetry and security utility built with **Python** and **Eel**. This tool provides real-time hardware diagnostics while maintaining enterprise-level software protection 
 
+Installation: https://astin7.github.io/cybermonitor/
+
 ## Engineering Highlights
 * **Minimal Overhead Engine**: Leverages `psutil` and `LibreHardwareMonitorLib` to deliver granular hardware telemetry with **<1% CPU utilization** 
 * **Hybrid GUI Architecture**: Utilizes a decoupled architecture where a **Python backend** manages low-level hardware access, communicating via WebSockets to a **HTML5/CSS3/JS frontend**
