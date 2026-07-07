@@ -12,11 +12,11 @@ import winreg
 
 # --- CONFIGURATION ---
 # Anyone can use this key for 20 minutes (1200 seconds)
-UNIVERSAL_TRIAL_KEY = "CYBER-DEMO-20" 
+UNIVERSAL_TRIAL_KEY = "CYBER-TRIAL-LIMITED" 
 
 # Hardware Lock Secrets
 PERM_SALT = "CYBER-2077-TOP-SECRET" 
-TRIAL_SALT = "CYBER-TRIAL-LIMITED"    
+TRIAL_SALT = "CYBER-MATH-SECRET-99"    
 LICENSE_FILE = "license_tracker.json"
 REG_PATH = r"Software\CyberMonitor"
 
