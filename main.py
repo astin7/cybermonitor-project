@@ -10,7 +10,7 @@ import hashlib
 import pythoncom 
 import winreg
 
-# --- CONFIGURATION ---
+# CONFIGURATION
 # Anyone can use this key for 20 minutes (1200 seconds)
 UNIVERSAL_TRIAL_KEY = "CYBER-TRIAL-LIMITED" 
 
@@ -40,7 +40,7 @@ if not is_admin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 0)
     sys.exit()
 
-# --- HARDWARE SECURITY ---
+# HARDWARE SECURITY
 def get_system_hwid():
     """Gets the unique Motherboard UUID"""
     try:
@@ -62,7 +62,7 @@ def verify_key_math(user_key, hwid, salt):
     except:
         return False
 
-# --- HARDWARE INIT ---
+# HARDWARE INIT
 from pythonnet import load
 try: load("netfx")
 except: pass
@@ -87,7 +87,7 @@ except Exception: pass
 
 eel.init('web')
 
-# --- LICENSE LOGIC ---
+# License logic 
 def load_license_data():
     """Reads license dictionary from the Windows Registry"""
     try:
@@ -130,7 +130,7 @@ def validate_key(user_key):
     
     my_hwid = get_system_hwid()
 
-    # CHECK UNIVERSAL TRIAL 
+    # Check universal trial 
     if user_key == UNIVERSAL_TRIAL_KEY:
         data = load_license_data()
         
@@ -149,12 +149,12 @@ def validate_key(user_key):
         else:
             return "expired"
 
-    # CHECK PERMANENT FORMULA
+    # Check permanent formula
     if verify_key_math(user_key, my_hwid, PERM_SALT):
         CURRENT_USER_KEY = "PERMANENT-OWNER"
         return "success"
     
-    # CHECK GENERATED TRIAL FORMULA (1 Hour Specific)
+    # Check generated trial formula (1 Hour Specific)
     if verify_key_math(user_key, my_hwid, TRIAL_SALT):
         data = load_license_data()
         if user_key not in data:
@@ -187,7 +187,7 @@ def decrement_time():
                 return 0
     return -1
 
-# --- DASHBOARD DATA ---
+# Dashboard data
 @eel.expose
 def get_stats():
     global last_cpu_mhz, last_gpu_mhz, DETECTED_BASE_CLOCK

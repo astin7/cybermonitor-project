@@ -1,8 +1,8 @@
 import hashlib
 
-# --- CONFIGURATION ---
+# Configuration
 PERM_SALT = "CYBER-2077-TOP-SECRET"   # Generates Lifetime Keys
-TRIAL_SALT = "CYBER-TRIAL-LIMITED"    # Generates 1-Hour Keys
+TRIAL_SALT = "CYBER-MATH-SECRET-99"    # Generates 1-Hour Keys
 
 def generate_key(hardware_id, salt):
     """Generates a key based on ID + Specific Salt"""
