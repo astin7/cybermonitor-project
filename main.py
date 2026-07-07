@@ -63,7 +63,7 @@ def verify_key_math(user_key, hwid, salt):
     except:
         return False
 
-# HARDWARE INIT
+# Hardware INIT
 from pythonnet import load
 try: load("netfx")
 except: pass
