@@ -11,7 +11,7 @@ import pythoncom
 import winreg
 import secrets_config
 
-# CONFIGURATION
+# Configuration
 # Anyone can use this key for 20 minutes (1200 seconds)
 UNIVERSAL_TRIAL_KEY = "CYBER-TRIAL-LIMITED" 
 
