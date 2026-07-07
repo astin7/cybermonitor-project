@@ -6,7 +6,6 @@ A high-performance system telemetry and security utility built with **Python** a
 1. **Download the latest release: Download CyberMonitor**
 2. **Local Development Setup:**
 
-   
    **If you are cloning this repository to build from source, you must configure your local environments variables:**
    * Rename `secrets_config.example.py` to `secrets_config.py`
    * Open `secrets_config.py` and replace the placeholder strings with your own custom crytopgraphic salts
