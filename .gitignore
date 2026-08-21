@@ -1,0 +1,28 @@
+# Node.js & Vite Frontend
+node_modules/
+dist-ssr/
+.env
+.env.*
+*.local
+
+# Python & Environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+
+# PyInstaller Build Artifacts
+build/
+dist/
+*.spec
+
+# CyberMonitor Security & Local Data
+license_tracker.json
+keygen.py
+secrets_config.py
+
+# OS & IDE Files
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,5 @@
+eel
+psutil
+WMI
+pywin32
+pythonnet
